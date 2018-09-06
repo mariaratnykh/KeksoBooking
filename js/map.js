@@ -7,6 +7,7 @@ var object1 = {
         'address' : '{{location.x}}, {{location.y}}',
         'price' : '5000',
         'type' : 'bungalo',
+        'rooms' : '3',
         'guests' : '8',
         'checkin' : '12:00',
         'checkout' : '12:00',
@@ -29,6 +30,7 @@ var object2 = {
         'address' : '{{location.x}}, {{location.y}}',
         'price' : '85000',
         'type' : 'bungalo',
+        'rooms' : '4',
         'guests' : '8',
         'checkin' : '12:00',
         'checkout' : '12:00',
@@ -50,6 +52,7 @@ var object3 = {
         'address' : '{{location.x}}, {{location.y}}',
         'price' : '15000',
         'type' : 'bungalo',
+        'rooms' : '2',
         'guests' : '6',
         'checkin' : '12:00',
         'checkout' : '12:00',
@@ -71,6 +74,7 @@ var object4 = {
         'address' : '{{location.x}}, {{location.y}}',
         'price' : '55000',
         'type' : 'house',
+        'rooms' : '4',
         'guests' : '15',
         'checkin' : '12:00',
         'checkout' : '12:00',
@@ -92,6 +96,7 @@ var object5 = {
         'address' : '{{location.x}}, {{location.y}}',
         'price' : '3000',
         'type' : 'bungalo',
+        'rooms' : '3',
         'guests' : '12',
         'checkin' : '13:00',
         'checkout' : '12:00',
@@ -110,9 +115,10 @@ var object6 = {
     },
     'offer' : {
         'title' : 'Огромный прекрасный дворец',
-        'address' : '{{location.x}}, {{location.y}}',
+        'address' : '{{this.location.x}}, {{this.location.y}}',
         'price' : '1 000 000',
         'type' : 'house',
+        'rooms' : '22',
         'guests' : '50',
         'checkin' : '14:00',
         'checkout' : '12:00',
@@ -134,6 +140,7 @@ var object7 = {
         'address' : '{{location.x}}, {{location.y}}',
         'price' : '3000',
         'type' : 'flat',
+        'rooms' : '2',
         'guests' : '6',
         'checkin' : '13:00',
         'checkout' : '12:00',
@@ -152,10 +159,11 @@ var object8 = {
     },
     'offer' : {
         'title' : 'Маленькая неуютная квартира',
-        'address' : '{{location.x}}, {{location.y}}',
+        'address' : '710, 450',
         'price' : '1000',
         'type' : 'flat',
-        'guests' : '2',
+        'rooms' : '2',
+        'guests' : '8',
         'checkin' : '14:00',
         'checkout' : '12:00',
         'features' : ['wifi', 'parking', 'elevator'],
@@ -198,4 +206,49 @@ for(var i = 0; i < objects.length; i++) {
 }
 
 // вставляем фрагмент внутрь .map__pins
- document.querySelector('.map__pins').appendChild(fragment);   
+document.querySelector('.map__pins').appendChild(fragment); 
+
+for (var j = 0; j < objects.length; j++) {
+
+// клонируем карточку объявления из template
+var template = document.querySelector('template').content.cloneNode(true);
+// добавляем заголовок и прочую информацию
+template.querySelector('h3').innerHTML = object8.offer.title;
+template.querySelector('p > small').innerHTML = object8.offer.address;
+template.querySelector('.popup__price').innerHTML = object8.offer.price + '&#x20bd;/ночь';
+// проверяем тип жилья и присваиваем в карточку
+var type;
+if(object8.offer.type === 'flat') {
+    type = "Квартира"
+} else if (object8.offer.type === 'bungalo') {
+    type = "Бунгало"
+} else if (object8.offer.type === 'house') {
+    type = "Дом"
+}
+template.querySelector('h4').innerHTML = type;
+template.querySelector('h4 ~ p').innerHTML = object8.offer.rooms + ' комнаты для ' + object8.offer.guests + ' гостей';
+template.querySelector('.popup__checkout').innerHTML = 'Заезд после ' + object8.offer.checkin + ', выезд после ' + object8.offer.checkout;
+
+// удаляем все содержимое features через цикл
+var features = template.querySelector('.popup__features');
+var featuresChildren = features.querySelectorAll('li');
+
+for (var i=0; i < featuresChildren.length; i++){
+    features.removeChild(featuresChildren[i]);
+}
+
+// создаем новый элемент для каждого свойства из offer.features,
+// добавляем для каждого элемента классы
+for( var i = 0; i < object8.offer.features.length; i++) {
+    var featuresLi = document.createElement('li');
+    features.appendChild(featuresLi);
+    featuresLi.classList.add('feature');
+    featuresLi.classList.add('feature--'+object8.offer.features[i]);
+}
+
+template.querySelector('ul ~ p').innerHTML = object8.offer.description;
+template.querySelector('.popup__avatar').src = object8.author.avatar;
+
+document.querySelector('.map').appendChild(template);
+}
+
