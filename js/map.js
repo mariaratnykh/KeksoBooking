@@ -262,11 +262,11 @@ for(var i = 0; i < popups.length; i++) {
     popups[i].classList.add('hidden');
 }
 // ??????????????????????????????????????????????????????????????????????????????
-/*
+
 for(var i = 0; i <= popups.length; i++) {
-    openPins(i);
+    pins[i].addEventListener('click', bigbigfunction(i), false);
 }
-*/
+
 /*
 function openPins (idx) {
     pins[idx].addEventListener('click', function(event) {
@@ -280,22 +280,9 @@ function openPins (idx) {
 }
 */
 
-function openPins (idx) {
-    pins[idx].addEventListener('click', function(event) {
-        pins[idx].nextSibling.classList.remove('hidden');
-        pins[idx].classList.add('map__pin--active');
-    });
-    closeButtons[idx].addEventListener('click', function(event){
-        popups[idx].classList.add('hidden');
-        pins[idx].classList.remove('map__pin--active');
-    })
+function bigbigfunction(i) {
+    return function(event) {
+        popups[i].classList.remove('hidden');
+        pins[i].classList.add('map__pin--active');
+    }
 }
-
-openPins(0);
-openPins(1);
-openPins(2);
-openPins(3);
-openPins(4);
-openPins(5);
-openPins(6);
-openPins(7);
