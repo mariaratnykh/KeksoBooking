@@ -197,39 +197,28 @@ function createPin (obj) {
     mapPin.appendChild(ava);
     return mapPin;
 }
-
-// создаем фрагмент и цикл, который последовательно добавляет все кнопки-пины во фрагмент из массива с объектами
-var fragment = document.createDocumentFragment();
-for(var i = 0; i < objects.length ; i++) {
-    fragment.appendChild(createPin(objects[i])); 
-}
-document.querySelector('.map__pins').appendChild(fragment);
-
-// создаем цикл, который создает карточки объектов
-for (var j = 0; j < objects.length; j++) {
-    // клонируем карточку объявления из template
+// Функция, создающая попапы для объявлений
+function createPopup (obj) {
     var template = document.querySelector('template').content.cloneNode(true);
-
     // добавляем заголовок и прочую информацию
-    template.querySelector('h3').innerHTML = objects[j].offer.title;
-    template.querySelector('small').innerHTML = objects[j].offer.address;
-    template.querySelector('.popup__price').innerHTML = objects[j].offer.price + '&#x20bd;/ночь';
-    
+    template.querySelector('h3').innerHTML = obj.offer.title;
+    template.querySelector('small').innerHTML = obj.offer.address;
+    template.querySelector('.popup__price').innerHTML = obj.offer.price + '&#x20bd;/ночь';
     // проверяем тип жилья и присваиваем карточке
-    function buldingTypeIdentify(q){
-        if(objects[q].offer.type === 'flat') {
+    function buldingTypeIdentify(obj){
+        if(obj.offer.type === 'flat') {
             return "Квартира"
-        } else if (objects[q].offer.type === 'bungalo') {
+        } else if (obj.offer.type === 'bungalo') {
             return"Бунгало"
-        } else if (objects[q].offer.type === 'house') {
+        } else if (obj.offer.type === 'house') {
             return "Дом"
         }
     }
-    template.querySelector('h4').innerHTML = buldingTypeIdentify(j);
-    template.querySelector('h4 ~ p').innerHTML = objects[j].offer.rooms + ' комнаты для ' + objects[j].offer.guests + ' гостей';
-    template.querySelector('.popup__checkout').innerHTML = 'Заезд после ' + objects[j].offer.checkin + ', выезд после ' + objects[j].offer.checkout;
-    template.querySelector('ul ~ p').innerHTML = objects[j].offer.description;
-    template.querySelector('.popup__avatar').src = objects[j].author.avatar;
+    template.querySelector('h4').innerHTML = buldingTypeIdentify(obj);
+    template.querySelector('h4 ~ p').innerHTML = obj.offer.rooms + ' комнаты для ' + obj.offer.guests + ' гостей';
+    template.querySelector('.popup__checkout').innerHTML = 'Заезд после ' + obj.offer.checkin + ', выезд после ' + obj.offer.checkout;
+    template.querySelector('ul ~ p').innerHTML = obj.offer.description;
+    template.querySelector('.popup__avatar').src = obj.author.avatar;
 
     // удаляем все содержимое features через цикл
     var features = template.querySelector('.popup__features');
@@ -240,35 +229,45 @@ for (var j = 0; j < objects.length; j++) {
 
     // создаем заново элементы features для каждого свойства из offer.features,
     // добавляем для каждого элемента классы
-    for( var i = 0; i < objects[j].offer.features.length; i++) {
+    for( var i = 0; i < obj.offer.features.length; i++) {
         var featuresLi = document.createElement('li');
         features.appendChild(featuresLi);
         featuresLi.classList.add('feature');
-        featuresLi.classList.add('feature--'+objects[j].offer.features[i]);
+        featuresLi.classList.add('feature--'+obj.offer.features[i]);
     }
-
-    // добавляем созданную в соответствии с объектом карточку на карту
-    document.querySelector('.map').appendChild(template);
+    return template;
 }
+
+// создаем фрагмент и цикл, который последовательно добавляет все кнопки-пины во фрагмент из массива с объектами
+var fragment = document.createDocumentFragment();
+for(var i = 0; i < objects.length ; i++) {
+    var adv = document.createElement('div');
+    adv.classList.add('map__adv');
+    adv.appendChild(createPin(objects[i]));
+    adv.appendChild(createPopup(objects[i])); 
+    fragment.appendChild(adv);
+}
+document.querySelector('.map').appendChild(fragment);
+var advs = document.querySelectorAll('.map__adv');
+console.log(advs);
+
 
 // Делаем функциональными кнопки объявлений
 
 var popups = document.querySelectorAll('.popup');
 var pins = document.querySelectorAll('.map__pin');
+var closeButtons = document.querySelectorAll('.popup__close');
 // Скрываем все карточки объявлений
 for(var i = 0; i < popups.length; i++) {
     popups[i].classList.add('hidden');
 }
-
-var closeButtons = document.querySelectorAll('.popup__close');
-
 // ??????????????????????????????????????????????????????????????????????????????
 /*
-for(var i = 0; i <= popups.length; i) {
+for(var i = 0; i <= popups.length; i++) {
     openPins(i);
-    i++;
 }
-
+*/
+/*
 function openPins (idx) {
     pins[idx].addEventListener('click', function(event) {
         popups[idx-1].classList.remove('hidden');
@@ -279,5 +278,24 @@ function openPins (idx) {
         pins[idx].classList.remove('map__pin--active');
     })
 }
-
 */
+
+function openPins (idx) {
+    pins[idx].addEventListener('click', function(event) {
+        pins[idx].nextSibling.classList.remove('hidden');
+        pins[idx].classList.add('map__pin--active');
+    });
+    closeButtons[idx].addEventListener('click', function(event){
+        popups[idx].classList.add('hidden');
+        pins[idx].classList.remove('map__pin--active');
+    })
+}
+
+openPins(0);
+openPins(1);
+openPins(2);
+openPins(3);
+openPins(4);
+openPins(5);
+openPins(6);
+openPins(7);
