@@ -1,3 +1,5 @@
+'use strict'
+
 var object1 = {
     'author': {
         'avatar': 'img/avatars/user01.png',
@@ -176,14 +178,13 @@ var object8 = {
     }
 }
 
-var objects = [object1, object2, object3, object4, object5, object6, object7, object8]
-
-document.querySelector('.map').classList.remove('map--faded');
+var objects = [object1, object2, object3, object4, object5, object6, object7, object8];
 
 // функция, которая создает пины с аватарами
 function createPin (obj) {
     var mapPin = document.createElement('button');
     mapPin.classList.add('map__pin');
+    mapPin.classList.add('map__pin--created')
     // задаем положение элементам с учетом указателя острым концом пина
     mapPin.style.left = (+obj.location.x - 20) + 'px';
     mapPin.style.top = (+obj.location.y + 40 )+ 'px';
@@ -195,6 +196,7 @@ function createPin (obj) {
     ava.draggable = false;
     // добавляем тэг с картинкой внутрь кнопки-пина
     mapPin.appendChild(ava);
+    mapPin.classList.add('hidden');
     return mapPin;
 }
 // Функция, создающая попапы для объявлений
@@ -235,6 +237,7 @@ function createPopup (obj) {
         featuresLi.classList.add('feature');
         featuresLi.classList.add('feature--'+obj.offer.features[i]);
     }
+    template.querySelector('.popup').classList.add('hidden');
     return template;
 }
 
@@ -249,40 +252,57 @@ for(var i = 0; i < objects.length ; i++) {
 }
 document.querySelector('.map').appendChild(fragment);
 var advs = document.querySelectorAll('.map__adv');
-console.log(advs);
 
-
-// Делаем функциональными кнопки объявлений
+// Make pins functioinal 
 
 var popups = document.querySelectorAll('.popup');
-var pins = document.querySelectorAll('.map__pin');
+var pins = document.querySelectorAll('.map__pin--created');
 var closeButtons = document.querySelectorAll('.popup__close');
-// Скрываем все карточки объявлений
+
+// Disable advertisement form
+var formElements = document.querySelectorAll('.form__element');
+for(i = 0; i < formElements.length; i++) {
+    formElements[i].setAttribute('disabled', 'disabled');
+}
+
+// Activate map and adverisement form after pressing the main button
+var pinMain = document.querySelector('.map__pin--main');
+pinMain.addEventListener('mouseup', function(event) {
+    document.querySelector('.map').classList.remove('map--faded');
+    for( i = 0; i < pins.length; i++) {
+        pins[i].classList.remove('hidden');
+    }
+    for(i = 0; i < formElements.length; i++) {
+        formElements[i].removeAttribute('disabled');
+    };
+    document.querySelector('.notice__form').classList.remove('notice__form--disabled');
+})
+
+// Open popup after pressing the pin
 for(var i = 0; i < popups.length; i++) {
-    popups[i].classList.add('hidden');
-}
-// ??????????????????????????????????????????????????????????????????????????????
-
-for(var i = 0; i <= popups.length; i++) {
-    pins[i].addEventListener('click', bigbigfunction(i), false);
+    addEvt(i);
 }
 
-/*
-function openPins (idx) {
-    pins[idx].addEventListener('click', function(event) {
-        popups[idx-1].classList.remove('hidden');
-        pins[idx].classList.add('map__pin--active');
-    });
-    closeButtons[idx].addEventListener('click', function(event){
-        popups[idx].classList.add('hidden');
-        pins[idx].classList.remove('map__pin--active');
-    })
+// Fucntion that makes pin inactive (if it is) and hides it's popup
+function makePinUnactive() {
+    for(var j = 0; j < pins.length; j++) {
+        if(pins[j].classList.contains('map__pin--active')) {
+            pins[j].classList.remove('map__pin--active');
+            if(!popups[j].classList.contains('hidden')){
+                popups[j].classList.add('hidden');
+            }
+        }
+    }
 }
-*/
-
-function bigbigfunction(i) {
-    return function(event) {
+// Functions for EventListener that opens popups
+function addEvt (i){
+    pins[i].addEventListener('click', function(event) {
+        makePinUnactive();
         popups[i].classList.remove('hidden');
         pins[i].classList.add('map__pin--active');
-    }
+    });
+    closeButtons[i].addEventListener('click', function(event){
+        popups[i].classList.add('hidden');
+        pins[i].classList.remove('map__pin--active');
+    });
 }
