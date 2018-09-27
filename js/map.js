@@ -306,3 +306,70 @@ function addEvt (i){
         pins[i].classList.remove('map__pin--active');
     });
 }
+
+// EventListener which change timeOut value depending on timeIn value
+var timeIn = document.querySelector('#timein');
+var timeIns = timeIn.children;
+var timeOut = document.querySelector('#timeout');
+var timeOuts = timeOut.children;
+
+timeIn.addEventListener('change', function(event) {
+    for(var i = 0; i < timeIns.length; i++) {
+        timeIns[i].removeAttribute('selected');
+        timeOuts[i].removeAttribute('selected');
+    }
+    var currentVal = this.value;
+    for (var t=0; t < timeIns.length; t++) {
+        if(timeOuts[t].value === currentVal){
+            timeIns[t].setAttribute('selected', 'selected');
+            timeOuts[t].setAttribute('selected', 'selected');
+        }
+    }
+})
+
+
+// EventListener which doesn't let to set incorrect price based on type of builing
+var price = document.querySelector('#price');
+var type = document.querySelector('#type');
+console.log(price.value);
+console.log(type.value);
+
+function isCorrectType() {
+    if(price.value < 1000) {
+        if(type.value === 'flat' || type.value === 'house' || type.value === 'palace'){
+            return false;
+        } 
+        return true;
+
+    } else if(price.value < 5000) {
+        if(type.value === 'house' || type.value === 'palace') {
+            return false;
+        }
+        return true;
+
+    } else if(price.value < 10000) {
+        if(type.value === 'palace') {
+            return false;
+        }
+        return true;
+
+    } else {
+        return true;
+    }
+}
+
+price.addEventListener('change', function(event){
+    if(!isCorrectType()){
+        price.setCustomValidity('Слишком низкая цена для данного типа недвижимости');
+    } else {
+    price.setCustomValidity('');
+    }
+})
+
+type.addEventListener('change', function(event) {
+    if(!isCorrectType()) {
+        price.setCustomValidity('Слишком низкая цена для данного типа недвижимости');
+    } else {
+    price.setCustomValidity('');
+    }
+})
