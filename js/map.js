@@ -193,6 +193,7 @@
         // make correct position for pins
         window.PIN_SHIFT_LEFT = 20;
         window.PIN_SHIFT_TOP = 40;
+        // PIN_SHIFT USAGE IS NECESSARY FOR CLEAR INDICATION OF ADDRESS BY SHARP CORNER OF PIN
         mapPin.style.left = (+obj.location.x - window.PIN_SHIFT_LEFT) + 'px';
         mapPin.style.top = (+obj.location.y + window.PIN_SHIFT_TOP )+ 'px';
         // create avatars for pins
@@ -426,21 +427,23 @@
             left: evt.x - startCoordinates.left,
             top: evt.y - startCoordinates.top,
         }
-        let pinMainTop = +pinMain.offsetTop + shift.top + window.PIN_SHIFT_TOP;
-        let pinMainLeft = +pinMain.offsetLeft + shift.left - window.PIN_SHIFT_LEFT;
+        
+        pinMain.style.top = pinMain.offsetTop + shift.top + 'px';
+        pinMain.style.left = pinMain.offsetLeft + shift.left + 'px';
 
+        // PIN_SHIFT USAGE IS NECESSARY FOR CLEAR INDICATION OF ADDRESS BY SHARP CORNER OF PIN
+        let pinMainCorrectTop = +pinMain.offsetTop + shift.top + window.PIN_SHIFT_TOP;
+        let pinMainCorrectLeft = +pinMain.offsetLeft + shift.left - window.PIN_SHIFT_LEFT;
         //if pin is out of map zone
-        if(pinMainTop < 140) {
-            pinMainTop = 140;
+        if(pinMainCorrectTop < 140) {
+            pinMainCorrectTop = 140;
+            pinMain.style.top = '140px';
         }
-        if(pinMainTop > 540) {
-            pinMainTop = 540;
+        if(pinMainCorrectTop > 540) {
+            pinMainCorrectTop = 540;
+            pinMain.style.top = '540px';
         }
 
-        //change pinMain position after drag'n'drop event
-        pinMain.style.top = pinMainTop + 'px';
-        pinMain.style.left = pinMainLeft + 'px';
-
-        pinMainAddress.value = 'x: ' + pinMainLeft + ', y: ' + pinMainTop;
+        pinMainAddress.value = 'x: ' + pinMainCorrectLeft + ', y: ' + pinMainCorrectTop;
     })
 })();
