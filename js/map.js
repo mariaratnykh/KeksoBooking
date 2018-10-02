@@ -183,10 +183,8 @@
     window.objects = [object1, object2, object3, object4, object5, object6, object7, object8];
 })();
 
-//create-pins-and-popups.js
 (function(){
-    
-    function createPin (obj) {
+    window.createPin = function(obj) {
         var mapPin = document.createElement('button');
         mapPin.classList.add('map__pin');
         mapPin.classList.add('map__pin--created')
@@ -208,7 +206,7 @@
         return mapPin;
     }
     // making popups function
-    function createPopup (obj) {
+    window.createPopup = function (obj) {
         var template = document.querySelector('template').content.cloneNode(true);
         // adding title and other information
         template.querySelector('h3').innerHTML = obj.offer.title;
@@ -249,201 +247,17 @@
         return template;
     }
 
-    // create document fragment and cycle, which adds all pins in fragment
-    var fragment = document.createDocumentFragment();
-    for(var i = 0; i < window.objects.length ; i++) {
+    function addPinAndPopup(obj) {
+        var fragment = document.createDocumentFragment();
         var adv = document.createElement('div');
         adv.classList.add('map__adv');
-        adv.appendChild(createPin(window.objects[i]));
-        adv.appendChild(createPopup(window.objects[i])); 
+        adv.appendChild(createPin(obj));
+        adv.appendChild(createPopup(obj)); 
         fragment.appendChild(adv);
+        document.querySelector('.map').appendChild(fragment);
     }
-    document.querySelector('.map').appendChild(fragment);
-    var advs = document.querySelectorAll('.map__adv');
-})();
-
-
-// Make pins functioinal 
-//open-popup.js
-(function(){
-    var popups = document.querySelectorAll('.popup');
-    var pins = document.querySelectorAll('.map__pin--created');
-    var closeButtons = document.querySelectorAll('.popup__close');
-
-    // Disable advertisement form
-    var formElements = document.querySelectorAll('.form__element');
-    for(i = 0; i < formElements.length; i++) {
-        formElements[i].setAttribute('disabled', 'disabled');
+    // create document fragment and cycle, which adds all pins in fragment
+    for(let i = 0; i < objects.length; i++ ) {
+        addPinAndPopup(objects[i]);
     }
-
-    // Activate map and adverisement form after pressing the main button
-    var pinMain = document.querySelector('.map__pin--main');
-    pinMain.addEventListener('mouseup', function(event) {
-        document.querySelector('.map').classList.remove('map--faded');
-        pinMain.setAttribute('draggable', 'true');
-        for( i = 0; i < pins.length; i++) {
-            pins[i].classList.remove('hidden');
-        }
-        for(i = 0; i < formElements.length; i++) {
-            formElements[i].removeAttribute('disabled');
-        };
-        document.querySelector('.notice__form').classList.remove('notice__form--disabled');
-    })
-
-    // Open popup after pressing the pin
-    for(var i = 0; i < popups.length; i++) {
-        addEvt(i);
-    }
-
-    // Fucntion that makes pin inactive (if it is) and hides it's popup
-    function makePinUnactive() {
-        for(var j = 0; j < pins.length; j++) {
-            if(pins[j].classList.contains('map__pin--active')) {
-                pins[j].classList.remove('map__pin--active');
-                if(!popups[j].classList.contains('hidden')){
-                    popups[j].classList.add('hidden');
-                }
-            }
-        }
-    }
-    // Functions for EventListener that opens popups
-    function addEvt (i){
-        pins[i].addEventListener('click', function(event) {
-            makePinUnactive();
-            popups[i].classList.remove('hidden');
-            pins[i].classList.add('map__pin--active');
-        });
-        closeButtons[i].addEventListener('click', function(event){
-            popups[i].classList.add('hidden');
-            pins[i].classList.remove('map__pin--active');
-        });
-    }
-})();
-
-
-
-// form.js
-(function(){
-    // EventListener which change timeOut value depending on timeIn value
-    var timeIn = document.querySelector('#timein');
-    var timeIns = timeIn.children;
-    var timeOut = document.querySelector('#timeout');
-    var timeOuts = timeOut.children;
-
-    timeIn.addEventListener('change', function(event) {
-        for(var i = 0; i < timeIns.length; i++) {
-            timeIns[i].removeAttribute('selected');
-            timeOuts[i].removeAttribute('selected');
-        }
-        var currentVal = this.value;
-        for (var t=0; t < timeIns.length; t++) {
-            if(timeOuts[t].value === currentVal){
-                timeIns[t].setAttribute('selected', 'selected');
-                timeOuts[t].setAttribute('selected', 'selected');
-            }
-        }
-    })
-    // EventListener which doesn't let to set incorrect price based on type of builing
-    var price = document.querySelector('#price');
-    var type = document.querySelector('#type');
-    console.log(price.value);
-    console.log(type.value);
-    
-    function isCorrectType() {
-        if(price.value < 1000) {
-            if(type.value === 'flat' || type.value === 'house' || type.value === 'palace'){
-                return false;
-            } 
-            return true;
-    
-        } else if(price.value < 5000) {
-            if(type.value === 'house' || type.value === 'palace') {
-                return false;
-            }
-            return true;
-    
-        } else if(price.value < 10000) {
-            if(type.value === 'palace') {
-                return false;
-            }
-            return true;
-    
-        } else {
-            return true;
-        }
-    }
-    
-    price.addEventListener('change', function(event){
-        if(!isCorrectType()){
-            price.setCustomValidity('Слишком низкая цена для данного типа недвижимости');
-        } else {
-        price.setCustomValidity('');
-        }
-    })
-    
-    type.addEventListener('change', function(event) {
-        if(!isCorrectType()) {
-            price.setCustomValidity('Слишком низкая цена для данного типа недвижимости');
-        } else {
-        price.setCustomValidity('');
-        }
-    })
-    
-    // EventListener which change capacity value depending on number of rooms
-    var rooms = document.querySelector('#room_number');
-    var capacity = document.querySelector('#capacity');
-    rooms.addEventListener('change', function(event){
-        for(i=0; i < rooms.children.length; i++){
-            capacity.children[i].removeAttribute('selected');
-        }
-        var currentVal = this.value;
-        if(currentVal === '1') {
-            capacity.children[2].setAttribute('selected', 'selected');
-        } else if(currentVal === '2') {
-            capacity.children[1].setAttribute('selected', 'selected');
-        } else if(currentVal === '3') {
-            capacity.children[0].setAttribute('selected', 'selected');
-        } else if(currentVal === '100') {
-            capacity.children[3].setAttribute('selected', 'selected');
-        }
-    })
-})();
-
-//drag-pin-main.js
-(function(){
-    let pinMain = document.querySelector('.map__pin--main');
-    let startCoordinates = {};
-    let shift = {};
-    let pinMainAddress = document.querySelector('#address'); //address in adv form
-
-    pinMain.addEventListener('dragstart', function(evt) {
-        startCoordinates = {
-            left: evt.x,
-            top: evt.y,
-        }
-    })
-    pinMain.addEventListener('dragend', function(evt) {
-        shift = {
-            left: evt.x - startCoordinates.left,
-            top: evt.y - startCoordinates.top,
-        }
-        
-        pinMain.style.top = pinMain.offsetTop + shift.top + 'px';
-        pinMain.style.left = pinMain.offsetLeft + shift.left + 'px';
-
-        // PIN_SHIFT USAGE IS NECESSARY FOR CLEAR INDICATION OF ADDRESS BY SHARP CORNER OF PIN
-        let pinMainCorrectTop = +pinMain.offsetTop + shift.top + window.PIN_SHIFT_TOP;
-        let pinMainCorrectLeft = +pinMain.offsetLeft + shift.left - window.PIN_SHIFT_LEFT;
-        //if pin is out of map zone
-        if(pinMainCorrectTop < 140) {
-            pinMainCorrectTop = 140;
-            pinMain.style.top = '140px';
-        }
-        if(pinMainCorrectTop > 540) {
-            pinMainCorrectTop = 540;
-            pinMain.style.top = '540px';
-        }
-
-        pinMainAddress.value = 'x: ' + pinMainCorrectLeft + ', y: ' + pinMainCorrectTop;
-    })
 })();
