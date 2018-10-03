@@ -14,32 +14,38 @@
                     break;
                 default:
                     error = xhr.status + ': ' + xhr.statusText;
+                    console.log(error)
+                    onError(error);
+                    return;
+                    
             }
 
             if(typeof onLoad == 'function') {
-                onLoad(data[0]);
+                for(let i = 0; i < data.length; i++) {
+                    onLoad(data[i]);
+                }
+                window.mapActivate();
                 return;
             };
-            if(typeof onError == 'function') {
-                onError(error);
-                return;
-            }
+            
         });
 
         xhr.open('GET', 'https://js.dump.academy/keksobooking/data', true);
         xhr.send();
     }
 
-    function cons(inf) {
-        console.log(inf[0]);
-        console.log(inf[2]);
-    }
-    function errCons(errInf) {
-        console.log(errInf)
+    function onError(errInf) {
+        let errorContainer = document.createElement('div');
+        errorContainer.style.cssText = 'background: red; \
+            width: 100%; \
+            heigth: 50px; \
+            position: absolute; \
+            top: 0; \
+            color: white; \
+            text-align: center';
+        errorContainer.textContent = errInf + ' Ошибка загрузки страницы';
+        document.querySelector('main').appendChild(errorContainer);
     }
 
-    getFromServer(createPin, errCons);
-    //onLoad(data); // => createPin(data)
-    //onError(error);
-    
+    getFromServer(window.addCardOnMap, onError);
 })()

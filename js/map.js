@@ -1,190 +1,7 @@
 //'use strict'
 
 (function(){
-
-    var object1 = {
-        'author': {
-            'avatar': 'img/avatars/user01.png',
-        },
-        'offer' : {
-            'title' : 'Красивый гостевой домик',
-            'address' : '{{location.x}}, {{location.y}}',
-            'price' : '5000',
-            'type' : 'bungalo',
-            'rooms' : '3',
-            'guests' : '8',
-            'checkin' : '12:00',
-            'checkout' : '12:00',
-            'features' : ['wifi', 'parking'],
-            'description' : '',
-            'photos' : [],
-        },
-        'location' : {
-            'x' : '680',
-            'y' : '300',
-        }
-    }
-    
-    var object2 = {
-        'author': {
-            'avatar': 'img/avatars/user02.png',
-        },
-        'offer' : {
-            'title' : 'Неуютное бунгало по колено в воде',
-            'address' : '{{location.x}}, {{location.y}}',
-            'price' : '85000',
-            'type' : 'bungalo',
-            'rooms' : '4',
-            'guests' : '8',
-            'checkin' : '12:00',
-            'checkout' : '12:00',
-            'features' : ['wifi', 'dishwasher'],
-            'description' : '',
-            'photos' : [],
-        },
-        'location' : {
-            'x' : '300',
-            'y' : '320',
-        }
-    }
-    var object3 = {
-        'author': {
-            'avatar': 'img/avatars/user03.png',
-        },
-        'offer' : {
-            'title' : 'Уютное бунгало далеко от моря',
-            'address' : '{{location.x}}, {{location.y}}',
-            'price' : '15000',
-            'type' : 'bungalo',
-            'rooms' : '2',
-            'guests' : '6',
-            'checkin' : '12:00',
-            'checkout' : '12:00',
-            'features' : ['wifi'],
-            'description' : '',
-            'photos' : [],
-        },
-        'location' : {
-            'x' : '380',
-            'y' : '175',
-        }
-    }
-    var object4 = {
-        'author': {
-            'avatar': 'img/avatars/user04.png',
-        },
-        'offer' : {
-            'title' : 'Маленький ужасный дворец',
-            'address' : '{{location.x}}, {{location.y}}',
-            'price' : '55000',
-            'type' : 'house',
-            'rooms' : '4',
-            'guests' : '15',
-            'checkin' : '12:00',
-            'checkout' : '12:00',
-            'features' : ['wifi', 'parking', 'conditioner'],
-            'description' : '',
-            'photos' : [],
-        },
-        'location' : {
-            'x' : '800',
-            'y' : '220',
-        }
-    }
-    var object5 = {
-        'author': {
-            'avatar': 'img/avatars/user05.png',
-        },
-        'offer' : {
-            'title' : 'Некрасивый негостиприимный домик',
-            'address' : '{{location.x}}, {{location.y}}',
-            'price' : '3000',
-            'type' : 'bungalo',
-            'rooms' : '3',
-            'guests' : '12',
-            'checkin' : '13:00',
-            'checkout' : '12:00',
-            'features' : ['wifi', 'parking'],
-            'description' : '',
-            'photos' : [],
-        },
-        'location' : {
-            'x' : '700',
-            'y' : '400',
-        }
-    }
-    var object6 = {
-        'author': {
-            'avatar': 'img/avatars/user06.png',
-        },
-        'offer' : {
-            'title' : 'Огромный прекрасный дворец',
-            'address' : '{{this.location.x}}, {{this.location.y}}',
-            'price' : '1 000 000',
-            'type' : 'house',
-            'rooms' : '22',
-            'guests' : '50',
-            'checkin' : '14:00',
-            'checkout' : '12:00',
-            'features' : ['wifi', 'parking', 'washer', 'conditioner', 'dishwasher'],
-            'description' : '',
-            'photos' : [],
-        },
-        'location' : {
-            'x' : '600',
-            'y' : '300',
-        }
-    }
-    var object7 = {
-        'author': {
-            'avatar': 'img/avatars/user07.png',
-        },
-        'offer' : {
-            'title' : 'Большая уютная квартира',
-            'address' : '{{location.x}}, {{location.y}}',
-            'price' : '3000',
-            'type' : 'flat',
-            'rooms' : '2',
-            'guests' : '6',
-            'checkin' : '13:00',
-            'checkout' : '12:00',
-            'features' : ['wifi', 'parking', 'elevator', 'conditioner'],
-            'description' : '',
-            'photos' : [],
-        },
-        'location' : {
-            'x' : '370',
-            'y' : '480',
-        }
-    }
-    var object8 = {
-        'author': {
-            'avatar': 'img/avatars/user08.png',
-        },
-        'offer' : {
-            'title' : 'Маленькая неуютная квартира',
-            'address' : '710, 450',
-            'price' : '1000',
-            'type' : 'flat',
-            'rooms' : '2',
-            'guests' : '8',
-            'checkin' : '14:00',
-            'checkout' : '12:00',
-            'features' : ['wifi', 'parking', 'elevator'],
-            'description' : '',
-            'photos' : [],
-        },
-        'location' : {
-            'x' : '710',
-            'y' : '450',
-        }
-    }
-    
-    window.objects = [object1, object2, object3, object4, object5, object6, object7, object8];
-})();
-
-(function(){
-    window.createPin = function(obj) {
+    let createPin = function(obj) {
         var mapPin = document.createElement('button');
         mapPin.classList.add('map__pin');
         mapPin.classList.add('map__pin--created')
@@ -206,7 +23,7 @@
         return mapPin;
     }
     // making popups function
-    window.createPopup = function (obj) {
+    let createPopup = function (obj) {
         var template = document.querySelector('template').content.cloneNode(true);
         // adding title and other information
         template.querySelector('h3').innerHTML = obj.offer.title;
@@ -247,17 +64,41 @@
         return template;
     }
 
-    function addPinAndPopup(obj) {
+    function createFunctionalCard(obj) {
         var fragment = document.createDocumentFragment();
-        var adv = document.createElement('div');
-        adv.classList.add('map__adv');
-        adv.appendChild(createPin(obj));
-        adv.appendChild(createPopup(obj)); 
-        fragment.appendChild(adv);
-        document.querySelector('.map').appendChild(fragment);
+        fragment.appendChild(createPin(obj));
+        fragment.appendChild(createPopup(obj));
+
+        let pin = fragment.querySelector('.map__pin');
+        let popup = fragment.querySelector('.popup');
+        let closeButton = popup.querySelector('.popup__close');
+
+        function makePinUnactive() {
+            let pins = document.querySelectorAll('.map__pin--created');
+            let popups = document.querySelectorAll('.popup');
+            for(let j = 0; j < pins.length; j++) {
+                if(pins[j].classList.contains('map__pin--active')) {
+                    pins[j].classList.remove('map__pin--active');
+                    if(!popups[j].classList.contains('hidden')){
+                        popups[j].classList.add('hidden');
+                    }
+                }
+            }
+        }
+        pin.addEventListener('click', function(event) {
+            makePinUnactive();
+            popup.classList.remove('hidden');
+            pin.classList.add('map__pin--active');
+        });
+        closeButton.addEventListener('click', function(event){
+            popup.classList.add('hidden');
+            pin.classList.remove('map__pin--active');
+        });
+
+        return fragment;
     }
-    // create document fragment and cycle, which adds all pins in fragment
-    for(let i = 0; i < objects.length; i++ ) {
-        addPinAndPopup(objects[i]);
+
+    window.addCardOnMap = function(obj) {
+        document.querySelector('.map').appendChild(createFunctionalCard(obj));
     }
 })();
