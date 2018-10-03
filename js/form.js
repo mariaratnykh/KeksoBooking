@@ -1,25 +1,5 @@
 // form.js
 (function(){
-        
-    // EventListener which change timeOut value depending on timeIn value
-    /*var timeIn = document.querySelector('#timein');
-    var timeIns = timeIn.children;
-    var timeOut = document.querySelector('#timeout');
-    var timeOuts = timeOut.children;
-
-    timeIn.addEventListener('change', function(event) {
-        for(var i = 0; i < timeIns.length; i++) {
-            timeIns[i].removeAttribute('selected');
-            timeOuts[i].removeAttribute('selected');
-        }
-        var currentVal = this.value;
-        for (var t=0; t < timeIns.length; t++) {
-            if(timeOuts[t].value === currentVal){
-                timeOut.value = '13:00';
-            }
-        }
-    })
-    */
     
     // EventListener which doesn't let to set incorrect price based on type of builing
     var price = document.querySelector('#price');
