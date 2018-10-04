@@ -19,7 +19,7 @@
         ava.draggable = false;
         // add img inside pin-button
         mapPin.appendChild(ava);
-        mapPin.classList.add('hidden');
+        //mapPin.classList.add('hidden');
         return mapPin;
     }
     // making popups function
@@ -101,4 +101,5 @@
     window.addCardOnMap = function(obj) {
         document.querySelector('.map').appendChild(createFunctionalCard(obj));
     }
+
 })();

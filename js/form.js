@@ -44,23 +44,5 @@
         price.setCustomValidity('');
         }
     })
-    
-    // EventListener which change capacity value depending on number of rooms
-    var rooms = document.querySelector('#room_number');
-    var capacity = document.querySelector('#capacity');
-    rooms.addEventListener('change', function(event){
-        for(i=0; i < rooms.children.length; i++){
-            capacity.children[i].removeAttribute('selected');
-        }
-        var currentVal = this.value;
-        if(currentVal === '1') {
-            capacity.children[2].setAttribute('selected', 'selected');
-        } else if(currentVal === '2') {
-            capacity.children[1].setAttribute('selected', 'selected');
-        } else if(currentVal === '3') {
-            capacity.children[0].setAttribute('selected', 'selected');
-        } else if(currentVal === '100') {
-            capacity.children[3].setAttribute('selected', 'selected');
-        }
-    })
+
 })();

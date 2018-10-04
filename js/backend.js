@@ -1,8 +1,8 @@
 (function(){
-    function getFromServer(onLoad, onError) {
+    window.getFromServer = function(onLoad, onError) {
         var xhr = new XMLHttpRequest();
         xhr.responseType = 'json';
-        let data;
+        window.data;
         let error;
 
         xhr.addEventListener('readystatechange', function() { 
@@ -14,19 +14,13 @@
                     break;
                 default:
                     error = xhr.status + ': ' + xhr.statusText;
-                    console.log(error)
                     onError(error);
                     return;
                     
             }
 
-            if(typeof onLoad == 'function') {
-                for(let i = 0; i < data.length; i++) {
-                    onLoad(data[i]);
-                }
-                window.mapActivate();
-                return;
-            };
+            onLoad(data);
+            return;
             
         });
 
@@ -34,7 +28,7 @@
         xhr.send();
     }
 
-    function onError(errInf) {
+    window.onError = function(errInf) {
         let errorContainer = document.createElement('div');
         errorContainer.style.cssText = 'background: red; \
             width: 100%; \
@@ -47,5 +41,4 @@
         document.querySelector('main').appendChild(errorContainer);
     }
 
-    getFromServer(window.addCardOnMap, onError);
 })()
