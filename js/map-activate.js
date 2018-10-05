@@ -10,6 +10,12 @@
         }
     }
 
+    window.addAllCards = function (data) {
+        data.forEach(function(name){
+            addCardOnMap(name); 
+        })
+    }
+
     // Activate map and adverisement form after pressing the main button
     window.mapActivate = function() {
         var pinMain = document.querySelector('.map__pin--main');
