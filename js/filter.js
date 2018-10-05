@@ -18,6 +18,30 @@
         })
     }
 
+    function getPriceCategory(obj) {
+        let priceCategory = 0;
+        if (obj.offer.price >= 10000 && obj.offer.price <= 50000) {
+            priceCategory = 'middle';
+        }
+        if (obj.offer.price < 10000) {
+            priceCategory = 'low';
+        }
+        if (obj.offer.price > 50000) {
+            priceCategory = 'high';
+        }
+        return priceCategory;
+    }
+
+    function isIncludesFeatures (obj, features) {
+        let radio = true;
+        for(let i = 0; i < features.length; i++ ) {
+            if(!obj.offer.features.includes(features[i])){
+                radio = false;
+            }
+        }
+        return radio;
+    }
+
     function showSortedCards(data) {
         let mapFilters = document.querySelector('.map__filters');
         let parameters = {
@@ -58,17 +82,7 @@
                 if(key == 'price' && parameters[key] != 'any') {
                     let sortedArrPrice = [];
                     sortedArr.forEach( function (sortedArrItem) {
-                        let priceCategory = 0;
-                        if (sortedArrItem.offer.price >= 10000 && sortedArrItem.offer.price <= 50000) {
-                            priceCategory = 'middle';
-                        }
-                        if (sortedArrItem.offer.price < 10000) {
-                            priceCategory = 'low';
-                        }
-                        if (sortedArrItem.offer.price > 50000) {
-                            priceCategory = 'high';
-                        }
-                        if (priceCategory == parameters.price) {
+                        if (getPriceCategory(sortedArrItem) == parameters.price) {
                             sortedArrPrice.push(sortedArrItem)
                         }
                     })
@@ -78,13 +92,7 @@
                 if(key == 'features') {
                     let sortedArrFeatures = [];
                     sortedArr.forEach(function(sortedArrItem) {
-                        let radio = true;
-                        for(let i = 0; i < parameters.features.length; i++ ) {
-                            if(!sortedArrItem.offer.features.includes(parameters.features[i])){
-                                radio = false;
-                            }
-                        }
-                        if(radio) {
+                        if(isIncludesFeatures(sortedArrItem, parameters.features)) {
                             sortedArrFeatures.push(sortedArrItem);
                         }
                     sortedArr = sortedArrFeatures;

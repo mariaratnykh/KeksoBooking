@@ -10,9 +10,16 @@
         }
     }
 
-    window.addAllCards = function (data) {
+    window.createCards = function (data) {
         data.forEach(function(name){
             addCardOnMap(name); 
+        })
+    }
+
+    function showCards () {
+        var pins = document.querySelectorAll('.map__pin--created');
+        Array.from(pins).forEach( function (pin) {
+            pin.classList.remove('hidden');
         })
     }
 
@@ -21,17 +28,14 @@
         var pinMain = document.querySelector('.map__pin--main');
 
         function mapPinHandler(evt) {
-            getFromServer(addAllCards, onError);
+            getFromServer(createCards, onError);
 
             var pinMain = document.querySelector('.map__pin--main');
-            var pins = document.querySelectorAll('.map__pin--created');
             document.querySelector('.map').classList.remove('map--faded');
             var formElements = document.querySelectorAll('.form__element');
 
             pinMain.setAttribute('draggable', 'true');
-            for( i = 0; i < pins.length; i++) {
-                pins[i].classList.remove('hidden');
-            }
+
             for(i = 0; i < formElements.length; i++) {
                 formElements[i].removeAttribute('disabled');
             };
