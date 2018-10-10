@@ -5,9 +5,9 @@
         document.querySelector('.map').classList.add('map--faded')
 
         var formElements = document.querySelectorAll('.form__element');
-        for(i = 0; i < formElements.length; i++) {
-            formElements[i].setAttribute('disabled', 'disabled');
-        }
+        Array.from(formElements).forEach(function(item) {
+            item.setAttribute('disabled', 'disabled');
+        })
     }
 
     window.createCards = function (data) {
@@ -36,9 +36,9 @@
 
             pinMain.setAttribute('draggable', 'true');
 
-            for(i = 0; i < formElements.length; i++) {
-                formElements[i].removeAttribute('disabled');
-            };
+            Array.from(formElements).forEach(function(item) {
+                item.removeAttribute('disabled');
+            })
             document.querySelector('.notice__form').classList.remove('notice__form--disabled');
             pinMain.removeEventListener('mousedown', mapPinHandler);
         }

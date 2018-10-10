@@ -63,7 +63,7 @@
             if(event.target.name == 'features') {
                 parameters.features = [];
                 let addedFeatures = mapFilters.querySelectorAll('input[type$="checkbox"]:checked');
-                addedFeatures.forEach( function (feature) {
+                Array.from(addedFeatures).forEach( function (feature) {
                     parameters.features.push(feature.value);
                 })
             }
