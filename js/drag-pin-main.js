@@ -1,5 +1,14 @@
-//drag-pin-main.js
-(function(){
+
+export {makeMainPinDraggable};
+
+const MAP_ZONE = {
+    TOP_MIN: 140,
+    TOP_MAX: 540,
+    LEFT_MIN: 50,
+    LEFT_MAX: 1100
+}
+
+function makeMainPinDraggable() {
     let pinMain = document.querySelector('.map__pin--main');
     let startCoordinates = {};
     let shift = {};
@@ -11,28 +20,33 @@
             top: evt.y,
         }
     })
+
     pinMain.addEventListener('dragend', function(evt) {
         shift = {
             left: evt.x - startCoordinates.left,
             top: evt.y - startCoordinates.top,
         }
-        
-        pinMain.style.top = pinMain.offsetTop + shift.top + 'px';
-        pinMain.style.left = pinMain.offsetLeft + shift.left + 'px';
 
         // PIN_SHIFT USAGE IS NECESSARY FOR CLEAR INDICATION OF ADDRESS BY SHARP CORNER OF PIN
-        let pinMainCorrectTop = +pinMain.offsetTop + shift.top + window.PIN_SHIFT_TOP;
-        let pinMainCorrectLeft = +pinMain.offsetLeft + shift.left - window.PIN_SHIFT_LEFT;
-        //if pin is out of map zone
-        if(pinMainCorrectTop < 140) {
-            pinMainCorrectTop = 140;
-            pinMain.style.top = '140px';
+        let pinMainTop = +pinMain.offsetTop + shift.top ;
+        if(pinMainTop < MAP_ZONE.TOP_MIN) {
+            pinMainTop = MAP_ZONE.TOP_MIN;
         }
-        if(pinMainCorrectTop > 540) {
-            pinMainCorrectTop = 540;
-            pinMain.style.top = '540px';
+        if(pinMainTop > MAP_ZONE.TOP_MAX) {
+            pinMainTop = MAP_ZONE.TOP_MAX;
         }
 
-        pinMainAddress.value = 'x: ' + pinMainCorrectLeft + ', y: ' + pinMainCorrectTop;
-    })
-})();
+        let pinMainLeft = +pinMain.offsetLeft + shift.left;
+        if(pinMainLeft < MAP_ZONE.LEFT_MIN) {
+            pinMainLeft = MAP_ZONE.LEFT_MIN;
+        }
+        if(pinMainLeft > MAP_ZONE.LEFT_MAX) {
+            pinMainLeft = MAP_ZONE.LEFT_MAX;
+        }
+
+        pinMain.style.left = pinMainLeft + 'px';
+        pinMain.style.top = pinMainTop + 'px';
+
+        pinMainAddress.value = 'x: ' + pinMainLeft + ', y: ' + pinMainTop;
+    });
+}

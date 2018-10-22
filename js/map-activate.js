@@ -1,49 +1,48 @@
-
 // Disable advertisement form 
-(function(){
-    window.mapDeactivate = function() {
-        document.querySelector('.map').classList.add('map--faded')
+import {getFromServer, onError} from './backend';
+import {addCardOnMap} from './card';
+export {deactivateMap, activateMapAfterClick};
 
-        var formElements = document.querySelectorAll('.form__element');
-        Array.from(formElements).forEach(function(item) {
-            item.setAttribute('disabled', 'disabled');
+let map = document.querySelector('.map');
+let formElements = Array.from(document.querySelectorAll('.form__element'));
+
+function deactivateMap() {
+    map.classList.add('map--faded');
+    formElements.forEach(function(item) {
+        item.setAttribute('disabled', 'disabled');
+    })
+}
+
+// Activate map and adverisement form after pressing the main button
+function activateMapAfterClick() {
+    let pinMain = document.querySelector('.map__pin--main');
+    pinMain.addEventListener('mousedown', mapPinHandler);
+
+    function mapPinHandler(evt) {
+        getFromServer(addAllCardsOnMap, onError);
+        showCards();
+        map.classList.remove('map--faded');
+
+        let pinMain = document.querySelector('.map__pin--main');
+        pinMain.setAttribute('draggable', 'true');
+        formElements.forEach(function(item) {
+            item.removeAttribute('disabled');
         })
+        document.querySelector('.notice__form').classList.remove('notice__form--disabled');
+
+        pinMain.removeEventListener('mousedown', mapPinHandler);
     }
+}
 
-    window.createCards = function (data) {
-        data.forEach(function(name){
-            addCardOnMap(name); 
-        })
-    }
-
-    function showCards () {
-        var pins = document.querySelectorAll('.map__pin--created');
-        Array.from(pins).forEach( function (pin) {
-            pin.classList.remove('hidden');
-        })
-    }
-
-    // Activate map and adverisement form after pressing the main button
-    window.mapActivate = function() {
-        var pinMain = document.querySelector('.map__pin--main');
-
-        function mapPinHandler(evt) {
-            getFromServer(createCards, onError);
-
-            var pinMain = document.querySelector('.map__pin--main');
-            document.querySelector('.map').classList.remove('map--faded');
-            var formElements = document.querySelectorAll('.form__element');
-
-            pinMain.setAttribute('draggable', 'true');
-
-            Array.from(formElements).forEach(function(item) {
-                item.removeAttribute('disabled');
-            })
-            document.querySelector('.notice__form').classList.remove('notice__form--disabled');
-            pinMain.removeEventListener('mousedown', mapPinHandler);
-        }
-        
-        pinMain.addEventListener('mousedown', mapPinHandler);
-    }
-
-})();
+function addAllCardsOnMap (data) {
+    data.forEach(function(name){
+        addCardOnMap(name); 
+    })
+}
+    
+function showCards () {
+    let pins = document.querySelectorAll('.map__pin--created');
+    Array.from(pins).forEach( function (pin) {
+        pin.classList.remove('hidden');
+    })
+}
